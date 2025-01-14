@@ -1,3 +1,5 @@
+https://github.com/AlariCode/4-mini-zustand
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
