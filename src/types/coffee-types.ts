@@ -1,3 +1,10 @@
+export enum CoffeeCategoryEnum {
+	cappuccino = 'cappuccino',
+	latte = 'latte',
+	machiatto = 'machiatto',
+	americano = 'americano',
+}
+
 export type CoffeeType = {
 	id: number;
 	name: string;
@@ -10,7 +17,8 @@ export type CoffeeType = {
 };
 
 export type GetCoffeeListReqParams = {
-	text: string;
+	text?: string;
+	type?: CoffeeCategoryEnum;
 };
 
 export type OrderItem = {
