@@ -1,14 +1,13 @@
 import { Button, Card, Rate, Tag } from 'antd';
-import { ShoppingCartOutlined } from '@ant-design/icons';
 import { CoffeeType } from '../types/coffee-types';
+import { ShoppingCartOutlined } from '@ant-design/icons';
 import { addToCart } from '../model/coffee-store';
-
+import '../App.css';
 
 export const CoffeeCard = ({ coffee }: { coffee: CoffeeType }) => {
-
-
 	return (
 		<Card
+			className="card"
 			hoverable
 			key={coffee.id}
 			cover={<img src={coffee.image} />}

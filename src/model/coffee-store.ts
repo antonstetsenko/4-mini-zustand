@@ -1,13 +1,15 @@
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-import { CoffeeType, GetCoffeeListReqParams } from '../types/coffee-types';
-import { CartActions, CartState, ListActions, ListState } from './store-types';
-import { cartSlice } from './cart-slice';
-import { listSlice } from './list-slice';
+import { CoffeeQueryParams, CoffeeType } from '../types/coffee-types';
 
-export const useCoffeeStore = create<CartActions & CartState & ListState & ListActions>()(
+import { devtools, persist } from 'zustand/middleware';
+
+import { CoffeeCartActions, CoffeeCartState, CoffeeListActions, CoffeeListState } from './store-types';
+import { listSlice } from './list-slice';
+import { cartSlice } from './cart-slice';
+
+export const useCoffeeStore = create<CoffeeListActions & CoffeeListState & CoffeeCartActions & CoffeeCartState>()(
 	devtools(
-		persist((...arg) => ({ ...cartSlice(...arg), ...listSlice(...arg) }), {
+		persist((...args) => ({ ...listSlice(...args), ...cartSlice(...args) }), {
 			name: 'coffeeStore',
 			partialize: (state) => ({ cart: state.cart, address: state.address }),
 		}),
@@ -17,14 +19,14 @@ export const useCoffeeStore = create<CartActions & CartState & ListState & ListA
 	),
 );
 
-export const getCoffeeList = (params?: GetCoffeeListReqParams) => useCoffeeStore.getState().getCoffeeList(params);
+export const getCoffeeList = (params?: CoffeeQueryParams) => useCoffeeStore.getState().getCoffeeList(params);
 
-export const setParams = (params?: GetCoffeeListReqParams) => useCoffeeStore.getState().setParams(params);
-
-export const setAddress = (address: string) => useCoffeeStore.getState().setAddress(address);
+export const addToCart = (item: CoffeeType) => useCoffeeStore.getState().addToCart(item);
 
 export const orderCoffee = () => useCoffeeStore.getState().orderCoffee();
 
+export const setAddress = (address: string) => useCoffeeStore.getState().setAddress(address);
+
 export const clearCart = () => useCoffeeStore.getState().clearCart();
 
-export const addToCart = (coffee: CoffeeType) => useCoffeeStore.getState().addToCart(coffee);
+export const setParams = (params: CoffeeQueryParams) => useCoffeeStore.getState().setParams(params);

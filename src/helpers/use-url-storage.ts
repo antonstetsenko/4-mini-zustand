@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-export const useUrlStorage = <T extends Record<string, string>>(params: T, setParams: (params: T) => void) => {
+export const useUrlParamsStore = <T extends Record<string, string>>(params: T, setParams: (params: T) => void) => {
 	const [queryParams, setQueryParams] = useSearchParams();
 
 	const setParamsFromUrl = () => {
-		const paramsFromUrl = Object.keys(params).reduce((acc, key) => {
+		const paramsFromUrl: Partial<T> = Object.keys(params).reduce((acc, key) => {
 			const value = queryParams.get(key);
-			if (value) {
+			if (typeof value === 'string') {
 				acc[key as keyof T] = value as T[keyof T];
 			}
 			return acc;

@@ -1,18 +1,16 @@
-import { useEffect } from 'react';
-import { useShallow } from 'zustand/react/shallow';
-import { getCoffeeList, useCoffeeStore } from '../model/coffee-store';
-import { useUrlStorage } from '../helpers/use-url-storage';
-
 import { Input } from 'antd';
+import { setParams, useCoffeeStore } from '../model/coffee-store';
+import { useUrlParamsStore } from '../helpers/use-url-storage';
+
+import { useShallow } from 'zustand/react/shallow';
+
+import { useCustomQuery } from '../helpers/use-custom-query';
 
 export const SearchInput = () => {
-	const [params, setParams] = useCoffeeStore(useShallow((state) => [state.params, state.setParams]));
+	const [params] = useCoffeeStore(useShallow((s) => [s.params]));
 
-	useEffect(() => {
-		getCoffeeList({ text: params.text });
-	}, []);
+	useUrlParamsStore(params, setParams);
+	useCustomQuery(params);
 
-	useUrlStorage(params, setParams);
-
-	return <Input placeholder="поиск" value={params.text} onChange={(e) => setParams({ text: e.target.value })} />;
+	return <Input placeholder="Search" value={params?.text} onChange={(e) => setParams({ text: e.target.value })} />;
 };

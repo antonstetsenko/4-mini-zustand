@@ -1,24 +1,24 @@
-import { CoffeeType, GetCoffeeListReqParams, OrderItem } from '../types/coffee-types';
+import { CoffeItem, CoffeeQueryParams, CoffeeType } from '../types/coffee-types';
 
-export type ListState = {
-	coffeeList?: CoffeeType[];
-	controller?: AbortController;
-	params: GetCoffeeListReqParams;
-};
-
-export type ListActions = {
-	getCoffeeList: (params?: GetCoffeeListReqParams) => void;
-	setParams: (params?: GetCoffeeListReqParams) => void;
-};
-
-export type CartState = {
-	cart?: OrderItem[];
+export type CoffeeCartState = {
+	cart?: CoffeItem[];
 	address?: string;
 };
 
-export type CartActions = {
+export type CoffeeCartActions = {
 	setAddress: (address: string) => void;
 	addToCart: (item: CoffeeType) => void;
 	orderCoffee: () => void;
 	clearCart: () => void;
+};
+
+export type CoffeeListState = {
+	coffeeList?: CoffeeType[];
+	controller?: AbortController;
+	params: CoffeeQueryParams;
+};
+
+export type CoffeeListActions = {
+	getCoffeeList: (params?: CoffeeQueryParams) => Promise<CoffeeType[]>;
+	setParams: (params?: CoffeeQueryParams) => void;
 };

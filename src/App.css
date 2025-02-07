@@ -1,15 +1,9 @@
 .wrapper {
 	display: flex;
 	flex-direction: column;
+	width: 100%;
 	gap: 16px;
-}
-
-.card div {
-	width: 300px;
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	padding: 16px;
+	padding: 24px;
 }
 
 .cardsContainer {
@@ -20,10 +14,14 @@
 	gap: 16px;
 }
 
-.cart {
+.container {
 	display: flex;
-	flex-direction: column;
+}
+
+.sider {
+	display: flex;
 	width: 300px;
+	flex-direction: column;
 	min-height: 100%;
 	padding: 8px;
 	gap: 16px;

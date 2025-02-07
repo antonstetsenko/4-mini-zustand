@@ -1,27 +1,20 @@
-import { Button, Input } from 'antd';
-import { clearCart, orderCoffee, setAddress, useCoffeeStore } from '../model/coffee-store';
+import { useCoffeeStore } from '../model/coffee-store';
 import { useShallow } from 'zustand/react/shallow';
 
 export const Cart = () => {
-	const [cart, address] = useCoffeeStore(useShallow((state) => [state.cart, state.address]));
+	const [cart] = useCoffeeStore(useShallow((state) => [state.cart]));
 
 	return (
-		<aside className="cart">
-			<h1>Заказ</h1>
-			{cart && cart.length > 0 ? (
+		<>
+			{cart ? (
 				<>
-					{cart.map((item, index) => (
-						<span key={index}>{item.name}</span>
+					{cart.map((item) => (
+						<span key={item.id}>{item.name}</span>
 					))}
-					<Input placeholder="Адрес" value={address} onChange={(e) => setAddress(e.target.value)} />
-					<Button type="primary" onClick={orderCoffee} disabled={!address}>
-						Сделать заказ
-					</Button>
-					<Button onClick={clearCart}>Очистить корзину</Button>
 				</>
 			) : (
-				<span>Добавьте напитки</span>
+				<span>Your cart is empty</span>
 			)}
-		</aside>
+		</>
 	);
 };

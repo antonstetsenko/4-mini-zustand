@@ -1,39 +1,49 @@
 import { StateCreator } from 'zustand';
-import { OrderCoffeeRes, OrderItem } from '../types/coffee-types';
-import { CartActions, CartState, ListActions, ListState } from './store-types';
-import axios from 'axios';
+import { CoffeeCartActions, CoffeeCartState, CoffeeListActions, CoffeeListState } from './store-types';
+import { CoffeItem, CoffeSizeEnum, OrderCoffeeReq, OrderCoffeeRes } from '../types/coffee-types';
+import axios, { AxiosError } from 'axios';
 import { BASE_URL } from '../api/core-api';
 
 export const cartSlice: StateCreator<
-	CartActions & CartState & ListState & ListActions,
+	CoffeeListActions & CoffeeListState & CoffeeCartActions & CoffeeCartState,
 	[['zustand/devtools', never], ['zustand/persist', unknown]],
 	[['zustand/devtools', never], ['zustand/persist', unknown]],
-	CartActions & CartState
+	CoffeeCartState & CoffeeCartActions
 > = (set, get) => ({
 	cart: undefined,
 	address: undefined,
+
+	clearCart: () => set({ cart: undefined }),
+
+	setAddress: (address) => set({ address }),
+
 	addToCart: (item) => {
 		const { cart } = get();
-		const { id, name, subTitle } = item;
-		const preparedItem: OrderItem = { id, name: `${name} ${subTitle}`, size: 'L', quantity: 1 };
+		const preparedItem: CoffeItem = {
+			id: item.id,
+			name: `${item.name} ${item.subTitle}`,
+			quantity: 1,
+			size: CoffeSizeEnum.M,
+		};
 		set({ cart: cart ? [...cart, preparedItem] : [preparedItem] });
 	},
+
 	orderCoffee: async () => {
-		const { cart, address, clearCart } = get();
+		const { cart, address } = get();
+		const order: OrderCoffeeReq = {
+			address: address!,
+			orderItems: cart!,
+		};
 		try {
-			const { data } = await axios.post<OrderCoffeeRes>(BASE_URL + 'order', { address, orderItems: cart });
+			const { data } = await axios.post<OrderCoffeeRes>(BASE_URL + 'order', order);
 			if (data.success) {
 				alert(data.message);
-				clearCart();
+				get().clearCart();
 			}
-		} catch (err) {
-			console.log(err);
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				console.log(error);
+			}
 		}
-	},
-	clearCart: () => {
-		set({ cart: undefined });
-	},
-	setAddress: (address) => {
-		set({ address });
 	},
 });
